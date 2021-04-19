@@ -21,5 +21,7 @@ services:
       - LOG_LEVEL=info
       - EXPRESS_PORT=3000
       - BULL_REDIS_DB=1
+      - BULL_DASHBOARD_USERNAME=admin
+      - BULL_DASHBOARD_PASSWORD=admin
     ports:
       - "3000:3000"

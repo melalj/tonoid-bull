@@ -18,17 +18,17 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@tonoid/bull@0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@tonoid/bull/-/bull-0.0.1.tgz#d92814bdde09eaec093ea5f73903c32d7ee28f47"
-  integrity sha512-36KVe0vTZVMv2Z3wIhLjB6nFhJyQ6axbO4vvM+1UIrcNoeSXiZ2w1yLvnMWreobS4Q1jrVDrJcjsq2vmBSe2Lw==
+"@tonoid/bull@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@tonoid/bull/-/bull-0.0.2.tgz#bf94a46cc4fcf6277db656bf79f389e1c96d3846"
+  integrity sha512-cI+PYCHyCvHd1HxTsjA5WEvoMwrpzn7hDHHWtm59zBXrZEk4svnZ5W+vH8+gMpf77ebGmnbSggbEcTjtBFVO7w==
   dependencies:
     bull "3.22.0"
 
-"@tonoid/express@0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@tonoid/express/-/express-0.0.3.tgz#e660c3696e47c8fafc3689a200e0f146562be55c"
-  integrity sha512-w77irrwI5Aw5KDxrWVZEHQe2rx88t/1mxVKJDcpU2pVG8YfdKF6baUju3Pe6cY4xTZwKQaEyv+aRJPe5beIw/A==
+"@tonoid/express@0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@tonoid/express/-/express-0.0.4.tgz#78ae90405d8f937d75f04e7a1ccf8e7b9ce9c37c"
+  integrity sha512-M2NtnYVqL2wJxUzDCYvjZJMsIujArTWv/WnyYV9vpA+5P68BnGZkNRomTBKjGDt7D3SunolN8yLlq4eb0ZqmbQ==
   dependencies:
     compression "1.7.4"
     express "4.17.1"

@@ -11,8 +11,8 @@
   "license": "MIT",
   "dependencies": {
     "@tonoid/helpers": "0.0.3",
-    "@tonoid/express": "0.0.3",
-    "@tonoid/bull": "0.0.1",
+    "@tonoid/express": "0.0.4",
+    "@tonoid/bull": "0.0.2",
     "bull-board": "1.5.1"
   }
 }

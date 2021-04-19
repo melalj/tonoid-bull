@@ -19,6 +19,7 @@ init([
   express({
     endpoints: [
       { path: '/', handler: apiHandler },
+      // You can remove the below section if you do not want a dashboard
       {
         path: '/bullBoard',
         handler: () => bullBoard.router,
@@ -32,7 +33,10 @@ init([
 
           const [username, password] = Buffer.from(req.headers.authorization.replace('Basic ', ''), 'base64').toString().split(':');
 
-          if (!(username === 'admin' && password === 'admin')) return reject();
+          if (
+            username !== process.env.BULL_DASHBOARD_USERNAME
+            || password !== process.env.BULL_DASHBOARD_PASSWORD
+          ) return reject();
           return next();
         },
       },

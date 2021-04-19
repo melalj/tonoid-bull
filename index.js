@@ -14,6 +14,7 @@ const defaultRedisConfig = {
 
 module.exports = ({
   redis = defaultRedisConfig,
+  bullBoard = null,
   queues = [],
 }) => ({
   name: 'bull',
@@ -47,6 +48,14 @@ module.exports = ({
       });
       queue.consumer({ queue: queuesObject[queue.name], queues: queuesObject });
     });
+
+    // Attach Bull Board
+    if (bullBoard) {
+      bullBoard.setQueues(
+        Object.keys(queuesObject)
+          .map((k) => new bullBoard.BullAdapter(queuesObject[k])),
+      );
+    }
 
     const close = () => {
       Object.keys(queuesObject).forEach((queueName) => {

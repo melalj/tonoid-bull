@@ -1,11 +1,16 @@
+/* eslint-disable no-await-in-loop */
+
 module.exports = ({ queue }) => {
   queue.process(async (job) => {
     // Do something with job.data
-    job.progress(10);
+    // For the sake of the example we simulate a long task
     job.log('Computing data');
-    await new Promise((r) => setTimeout(r, 1000));
-    job.log('Almost there');
-    job.progress(90);
+    for (let i = 0; i < 10; i += 1) {
+      job.progress(i * 10);
+      job.log(`Process ${i}...`);
+      await new Promise((r) => setTimeout(r, 1000));
+    }
+    job.progress(100);
     return JSON.stringify(job.data);
   });
 };

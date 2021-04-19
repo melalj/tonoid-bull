@@ -1,7 +1,6 @@
 version: '3.7'
 volumes:
   redisdata:
-  mongodata:
 
 services:
   redis:
@@ -10,7 +9,7 @@ services:
     volumes:
       - redisdata:/data
 
-  bull-example:
+  example-bull:
     restart: on-failure
     build: ./
     volumes:

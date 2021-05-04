@@ -50,11 +50,13 @@ module.exports = ({
     });
 
     // Attach Bull Board
-    if (bullBoard) {
-      bullBoard.setQueues(
+    if (bullBoard && bullBoard.BullAdapter) {
+      const { router } = bullBoard.createBullBoard(
         Object.keys(queuesObject)
           .map((k) => new bullBoard.BullAdapter(queuesObject[k])),
       );
+      // eslint-disable-next-line no-param-reassign
+      bullBoard.router = router;
     }
 
     const close = () => {

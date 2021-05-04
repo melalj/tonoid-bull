@@ -1,7 +1,15 @@
 const { init } = require('@tonoid/helpers');
 const express = require('@tonoid/express');
 const bull = require('@tonoid/bull');
-const bullBoard = require('bull-board');
+
+const { createBullBoard } = require('bull-board');
+const { BullAdapter } = require('bull-board/bullAdapter');
+
+const bullBoard = {
+  createBullBoard,
+  BullAdapter,
+  router: () => {},
+};
 
 const jsonStringifyConsumer = require('./queues/jsonStringify');
 const apiHandler = require('./apiHandler');

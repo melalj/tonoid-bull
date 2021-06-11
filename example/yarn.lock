@@ -35,12 +35,12 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@tonoid/bull@0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@tonoid/bull/-/bull-0.0.3.tgz#9043954761dbf9b75e23e74d7ede8aa46ec8f6fd"
-  integrity sha512-MR01DoZjztUjCSmM8iJqwhXtM1q3OT+SEJP97mUvy+Q6Rz9hQ/RP22FwI/IOO1lgfqLH40pZdaxAv6mzgUpnsA==
+"@tonoid/bull@0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@tonoid/bull/-/bull-0.0.4.tgz#f056a9955cb3b1c6e4f19c67d8cc037bd5b7d530"
+  integrity sha512-YhFyjnckqnkg8xjCShVMbdugIg8dnCUXsBSiRoIkfvMI8xFLJmD+TPs9Nchz9OtN0AX/qDMQ2uvcH6LCSwkNvw==
   dependencies:
-    bull "3.22.4"
+    bull "3.22.8"
 
 "@tonoid/express@0.0.10":
   version "0.0.10"
@@ -118,15 +118,15 @@ brace-expansion@^1.1.7:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
 
-bull@3.22.4:
-  version "3.22.4"
-  resolved "https://registry.yarnpkg.com/bull/-/bull-3.22.4.tgz#1bda418d2aebdf892413d0c45d75c8ea5e0fc984"
-  integrity sha512-CV78TuSKyDj3SuZvySTOFXqZBtHxebhctLTq2Ff9Jrn51XOaxkEDioIDzq2LIUKEhTW8l3rFK5bIWNwweY0LXQ==
+bull@3.22.8:
+  version "3.22.8"
+  resolved "https://registry.yarnpkg.com/bull/-/bull-3.22.8.tgz#ca15630d5eab2d41cc6f98a786bafcab15d1575f"
+  integrity sha512-HqUKZqGqhIUY3JJSypUNICxa8q4Ka2812S3Alth6tSBsjYf7NBQQlMifCpX9ua4Y+JMQHoYIqz7b9midzpwxqg==
   dependencies:
     cron-parser "^2.13.0"
     debuglog "^1.0.0"
     get-port "^5.1.1"
-    ioredis "^4.22.0"
+    ioredis "^4.27.0"
     lodash "^4.17.21"
     p-timeout "^3.2.0"
     promise.prototype.finally "^3.1.2"
@@ -570,10 +570,10 @@ inherits@2.0.4, inherits@^2.0.3, inherits@~2.0.3:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
-ioredis@^4.22.0:
-  version "4.26.0"
-  resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-4.26.0.tgz#dbbfb5e5da085fc2b1de8174db50fa42f9fed66a"
-  integrity sha512-nh39okWezWWZ35/RxXXzHksMFt4WCaev8SNO2kozRDeVdEAJj16EarqPP3JeHz8IEjEXN5CiVtbWMk62Z0eveQ==
+ioredis@^4.27.0:
+  version "4.27.5"
+  resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-4.27.5.tgz#b62192bb6198f8a5a02947902117150aef39b7f1"
+  integrity sha512-JJ3HzOzU6kgUk3gKhpx8kxEYn9ruI5TkpOtGvbw/hLyWxfC19T9uCZTgmw4Mci4al4aOCCMfAjYzJ7aqQkLbJg==
   dependencies:
     cluster-key-slot "^1.1.0"
     debug "^4.3.1"

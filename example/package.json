@@ -12,7 +12,7 @@
   "dependencies": {
     "@tonoid/helpers": "0.0.5",
     "@tonoid/express": "0.0.10",
-    "@tonoid/bull": "0.0.3",
+    "@tonoid/bull": "0.0.4",
     "@bull-board/api": "3.2.7",
     "@bull-board/express": "3.2.7"
   }

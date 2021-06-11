@@ -7,6 +7,7 @@ const { BullAdapter } = require('@bull-board/api/bullAdapter');
 const { ExpressAdapter } = require('@bull-board/express');
 
 const serverAdapter = new ExpressAdapter();
+serverAdapter.setBasePath('/bullBoard');
 
 const jsonStringifyConsumer = require('./queues/jsonStringify');
 const apiHandler = require('./apiHandler');

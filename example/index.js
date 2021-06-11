@@ -2,21 +2,23 @@ const { init } = require('@tonoid/helpers');
 const express = require('@tonoid/express');
 const bull = require('@tonoid/bull');
 
-const { createBullBoard } = require('bull-board');
-const { BullAdapter } = require('bull-board/bullAdapter');
+const { createBullBoard } = require('@bull-board/api');
+const { BullAdapter } = require('@bull-board/api/bullAdapter');
+const { ExpressAdapter } = require('@bull-board/express');
 
-const bullBoard = {
-  createBullBoard,
-  BullAdapter,
-  router: () => {},
-};
+const serverAdapter = new ExpressAdapter();
 
 const jsonStringifyConsumer = require('./queues/jsonStringify');
 const apiHandler = require('./apiHandler');
 
 init([
   bull({
-    bullBoard,
+    middleware: ({ queuesObject }) => {
+      createBullBoard({
+        queues: Object.keys(queuesObject).map((k) => new BullAdapter(queuesObject[k])),
+        serverAdapter,
+      });
+    },
     queues: [
       {
         name: 'jsonStringify',
@@ -30,7 +32,7 @@ init([
       // You can remove the below section if you do not want a dashboard
       {
         path: '/bullBoard',
-        handler: () => bullBoard.router,
+        handler: () => serverAdapter.getRouter(),
         middleware: (req, res, next) => {
           const reject = () => {
             res.setHeader('www-authenticate', 'Basic');

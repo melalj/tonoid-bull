@@ -10,9 +10,10 @@
   "author": "Simo Elalj <simo@tonoid.com>",
   "license": "MIT",
   "dependencies": {
-    "@tonoid/helpers": "0.0.4",
-    "@tonoid/express": "0.0.7",
+    "@tonoid/helpers": "0.0.5",
+    "@tonoid/express": "0.0.10",
     "@tonoid/bull": "0.0.3",
-    "bull-board": "2.0.1"
+    "@bull-board/api": "3.2.7",
+    "@bull-board/express": "3.2.7"
   }
 }

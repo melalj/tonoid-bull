@@ -15,6 +15,7 @@ const defaultRedisConfig = {
 module.exports = ({
   redis = defaultRedisConfig,
   bullBoard = null,
+  middleware = () => {},
   queues = [],
 }) => ({
   name: 'bull',
@@ -49,7 +50,7 @@ module.exports = ({
       queue.consumer({ queue: queuesObject[queue.name], queues: queuesObject });
     });
 
-    // Attach Bull Board
+    // Attach Bull Board (v2)
     if (bullBoard && bullBoard.BullAdapter) {
       const { router } = bullBoard.createBullBoard(
         Object.keys(queuesObject)
@@ -58,6 +59,9 @@ module.exports = ({
       // eslint-disable-next-line no-param-reassign
       bullBoard.router = router;
     }
+
+    // Add Queue middleware
+    middleware({ queues, queuesObject, redis });
 
     const close = () => {
       Object.keys(queuesObject).forEach((queueName) => {

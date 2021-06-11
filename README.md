@@ -7,17 +7,16 @@ Bull plugin for [@tonoid/helpers](https://github.com/melalj/tonoid-helpers) - ha
 
 ## Init options
 
-- `host`: (defaults: `process.env.REDIS_HOST || 'mongo'`) Redis host.
-- `port`: (defaults: `process.env.REDIS_PORT || 27017`) Redis port.
-- `password`: (defaults: `process.env.REDIS_PASSWORD || 'mongo'`) Redis password.
-- `db`: (defaults: `process.env.REDIS_DB || 'admin'`) Redis database.
-- `url`: (defaults: `process.env.REDIS_URL`) Redis url, if set it overrides other auth options.
+- `redis.host`: (defaults: `process.env.REDIS_HOST || 'mongo'`) Redis host.
+- `redis.port`: (defaults: `process.env.REDIS_PORT || 27017`) Redis port.
+- `redis.password`: (defaults: `process.env.REDIS_PASSWORD || 'mongo'`) Redis password.
+- `redis.db`: (defaults: `process.env.REDIS_DB || 'admin'`) Redis database.
+- `redis.url`: (defaults: `process.env.REDIS_URL`) Redis url, if set it overrides other auth options.
+- `middleware`: function to manipulate `{ queues, queuesObject, redis }`, useful if you're using admin ui like @bull-board
 
 ## Exported context attributes
 
-- `.getValue(key)`: Get a value from redis cache
-- `.setValue(key, value, ttl)`: Set a value in redis cache
-- `.delValue(key)`: Delete a value in redis cache
+- `.queues`: Object containing all queues (useful to add to a queue)
 
 ## Usage example
 
@@ -49,9 +48,9 @@ const jsonStringifyQueue = ({ queue }) => {
     }),
   ]);
 
-  await context.redis.setValue('foo', 'bar');
-  const fooValue = await context.redis.getValue('foo');
-  console.log(fooValue);
+  const job = await context.bull.jsonStringify.add({ foo: 'bar' });
+  const result = await job.finished();
+  console.log(result);
 })();
 
 ```

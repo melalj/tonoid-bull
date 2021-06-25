@@ -61,7 +61,7 @@ module.exports = ({
     }
 
     // Add Queue middleware
-    middleware({ queues, queuesObject, redis });
+    await middleware({ queues, queuesObject, redis });
 
     const close = () => {
       Object.keys(queuesObject).forEach((queueName) => {

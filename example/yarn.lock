@@ -35,12 +35,13 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@tonoid/bull@0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@tonoid/bull/-/bull-0.0.5.tgz#25e0dad55b676f1eff86832cdb31e010873d81ee"
-  integrity sha512-FHBTJBEDSN0kKIv6/afughK5Nq52KC30Xxp5uoESuACYz//0d70ewKTxhMTf6ot6IbrnmwcR1Zbg6xMB1NJlxw==
+"@tonoid/bull@0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@tonoid/bull/-/bull-0.0.6.tgz#a29be044f69f272b840a4a4e227dbc4e0e91eff2"
+  integrity sha512-ypVKi5MIgfc12VouTp8kDim+Py0dT5RAK2RYnmTL5FqjE17mA+xnRUCSyMauWVYiCEbFn3KTilljyomiLVd3lw==
   dependencies:
-    bull "3.22.8"
+    bull "3.29.2"
+    ioredis "4.27.10"
 
 "@tonoid/express@0.0.10":
   version "0.0.10"
@@ -118,10 +119,10 @@ brace-expansion@^1.1.7:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
 
-bull@3.22.8:
-  version "3.22.8"
-  resolved "https://registry.yarnpkg.com/bull/-/bull-3.22.8.tgz#ca15630d5eab2d41cc6f98a786bafcab15d1575f"
-  integrity sha512-HqUKZqGqhIUY3JJSypUNICxa8q4Ka2812S3Alth6tSBsjYf7NBQQlMifCpX9ua4Y+JMQHoYIqz7b9midzpwxqg==
+bull@3.29.2:
+  version "3.29.2"
+  resolved "https://registry.yarnpkg.com/bull/-/bull-3.29.2.tgz#30051fd14c7214b1e90c212585674f77fd982650"
+  integrity sha512-zWHyza/ElwVvJUqIEDJdUhGKd1V9EHjituUL7sJAmJoxS9Z7QMhYcMOWcgbUlWPgtiKN1g9ZlOtFAoq7C4/SQw==
   dependencies:
     cron-parser "^2.13.0"
     debuglog "^1.0.0"
@@ -570,6 +571,23 @@ inherits@2.0.4, inherits@^2.0.3, inherits@~2.0.3:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
+ioredis@4.27.10:
+  version "4.27.10"
+  resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-4.27.10.tgz#3da6c1d2eab440f94c52d6fcd9b91127d7e07470"
+  integrity sha512-BtV2mEoZlhnW0EyxuK49V5iutLeZeJAYi/+Fuc4Q6DpDjq0cGMLODdS/+Kb5CHpT7v3YT6SK0vgJF6y0Ls4+Bg==
+  dependencies:
+    cluster-key-slot "^1.1.0"
+    debug "^4.3.1"
+    denque "^1.1.0"
+    lodash.defaults "^4.2.0"
+    lodash.flatten "^4.4.0"
+    lodash.isarguments "^3.1.0"
+    p-map "^2.1.0"
+    redis-commands "1.7.0"
+    redis-errors "^1.2.0"
+    redis-parser "^3.0.0"
+    standard-as-callback "^2.1.0"
+
 ioredis@^4.27.0:
   version "4.27.5"
   resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-4.27.5.tgz#b62192bb6198f8a5a02947902117150aef39b7f1"
@@ -690,6 +708,11 @@ lodash.flatten@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.flatten/-/lodash.flatten-4.4.0.tgz#f31c22225a9632d2bbf8e4addbef240aa765a61f"
   integrity sha1-8xwiIlqWMtK7+OSt2+8kCqdlph8=
+
+lodash.isarguments@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/lodash.isarguments/-/lodash.isarguments-3.1.0.tgz#2f573d85c6a24289ff00663b491c1d338ff3458a"
+  integrity sha1-L1c9hcaiQon/AGY7SRwdM4/zRYo=
 
 lodash@^4.17.11, lodash@^4.17.20, lodash@^4.17.21:
   version "4.17.21"

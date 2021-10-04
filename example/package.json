@@ -1,6 +1,6 @@
 {
   "name": "example-bull",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Usage Example for @tonoid/bull",
   "main": "index.js",
   "scripts": {
@@ -12,8 +12,8 @@
   "dependencies": {
     "@tonoid/helpers": "0.0.5",
     "@tonoid/express": "0.0.10",
-    "@tonoid/bull": "0.0.4",
-    "@bull-board/api": "3.2.7",
-    "@bull-board/express": "3.2.7"
+    "@tonoid/bull": "0.0.5",
+    "@bull-board/api": "3.6.0",
+    "@bull-board/express": "3.6.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@tonoid/bull",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Bull plugin for @tonoid/helpers - handling messaging queues and background tasks",
   "main": "index.js",
   "scripts": {
@@ -32,6 +32,7 @@
     "eslint-plugin-import": "2.22.1"
   },
   "dependencies": {
-    "bull": "3.22.8"
+    "bull": "3.29.2",
+    "ioredis": "4.27.10"
   }
 }

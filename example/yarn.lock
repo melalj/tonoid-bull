@@ -2,29 +2,29 @@
 # yarn lockfile v1
 
 
-"@bull-board/api@3.2.7":
-  version "3.2.7"
-  resolved "https://registry.yarnpkg.com/@bull-board/api/-/api-3.2.7.tgz#d18809e80b4787525403cf0997f583f2d6fd748f"
-  integrity sha512-tBvOnTxNZW9QO0eSF8UpwMBp0X8Dmk383V7KaDqj5Zp75gD0NclJFvqbAWKe413OTITIyBWPw4JA7nTJM8B4og==
+"@bull-board/api@3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@bull-board/api/-/api-3.6.0.tgz#5f6e4e338502fa7971be08fb8a72f0d49f001a74"
+  integrity sha512-x2Du+bJRl/Nz0hawub7Yo7Y2R3vR8K3kFzAyptbgmcT32CooR3u5tDIe8lUA0UO2NnZ4asoyFKamp+KVgS18KA==
   dependencies:
     redis-info "^3.0.8"
 
-"@bull-board/express@3.2.7":
-  version "3.2.7"
-  resolved "https://registry.yarnpkg.com/@bull-board/express/-/express-3.2.7.tgz#c613eb694e85c8e444f69e8916fcefd72a901a3f"
-  integrity sha512-on8Kggzuza29P5VIbvdRWtpV/TwRe3RIeQU4lSra6outsyzQsWVRgvBmp11NFdcQrBOAxvnpK3FrlVS7vM4niQ==
+"@bull-board/express@3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@bull-board/express/-/express-3.6.0.tgz#d87e4d353a340547c66da4d0fa2cc061146e699f"
+  integrity sha512-r7qifpNA7YGO3Lq4ptjPznUsV0gL1IouXiQoQ+uRbr0PdwrDNXKYh9LSh6QvxY6X5E73HOF4Rd96e2XKOoMfTQ==
   dependencies:
-    "@bull-board/api" "3.2.7"
-    "@bull-board/ui" "3.2.7"
+    "@bull-board/api" "3.6.0"
+    "@bull-board/ui" "3.6.0"
     ejs "3.1.6"
     express "4.17.1"
 
-"@bull-board/ui@3.2.7":
-  version "3.2.7"
-  resolved "https://registry.yarnpkg.com/@bull-board/ui/-/ui-3.2.7.tgz#32b1aab64e8eb6a8515907e83d9949f25b3ca0d1"
-  integrity sha512-93kVRqY4T3Oiubc/e1yGecVVhrNHXft5Rh7J+ajiim8z9Ab/+jWSfXFm0LL+2Qoa1ny1uFL3jjYfNhqdkfkkhA==
+"@bull-board/ui@3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@bull-board/ui/-/ui-3.6.0.tgz#29719fe396fb4250bc35ef61ea5c4a6a78327fef"
+  integrity sha512-VCzMplusyRA1DaeQO0ZB84AHnThAbE7VvLVSkJ5BYmcCo+nzDtWP/odgBJTCsV6+AVPThO8QSOUTDNjEnEfUEg==
   dependencies:
-    "@bull-board/api" "3.2.7"
+    "@bull-board/api" "3.6.0"
 
 "@dabh/diagnostics@^2.0.2":
   version "2.0.2"
@@ -35,10 +35,10 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@tonoid/bull@0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@tonoid/bull/-/bull-0.0.4.tgz#f056a9955cb3b1c6e4f19c67d8cc037bd5b7d530"
-  integrity sha512-YhFyjnckqnkg8xjCShVMbdugIg8dnCUXsBSiRoIkfvMI8xFLJmD+TPs9Nchz9OtN0AX/qDMQ2uvcH6LCSwkNvw==
+"@tonoid/bull@0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@tonoid/bull/-/bull-0.0.5.tgz#25e0dad55b676f1eff86832cdb31e010873d81ee"
+  integrity sha512-FHBTJBEDSN0kKIv6/afughK5Nq52KC30Xxp5uoESuACYz//0d70ewKTxhMTf6ot6IbrnmwcR1Zbg6xMB1NJlxw==
   dependencies:
     bull "3.22.8"
 

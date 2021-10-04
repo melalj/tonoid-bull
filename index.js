@@ -1,4 +1,5 @@
 const Queue = require('bull');
+const Redis = require('ioredis');
 
 const defaultRedisConfig = {
   ...(process.env.REDIS_URL
@@ -39,13 +40,27 @@ module.exports = ({
       };
     }
 
+    const client = new Redis(redisOpts);
+    const subscriber = new Redis(redisOpts);
+
     const queuesObject = {};
 
-    // Start queues
+    // Start queues and reuse redis connections
     queues.filter((q) => q.name && q.consumer).forEach((queue) => {
       queuesObject[queue.name] = new Queue(queue.name, {
-        redis: redisOpts,
         ...(queue.options || {}),
+        createClient(type) {
+          switch (type) {
+            case 'client':
+              return client;
+            case 'subscriber':
+              return subscriber;
+            case 'bclient':
+              return new Redis(redisOpts);
+            default:
+              throw new Error('Unexpected connection type: ', type);
+          }
+        },
       });
       queue.consumer({ queue: queuesObject[queue.name], queues: queuesObject });
     });

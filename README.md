@@ -13,6 +13,9 @@ Bull plugin for [@tonoid/helpers](https://github.com/melalj/tonoid-helpers) - ha
 - `redis.db`: (defaults: `process.env.BULL_REDIS_DB || process.env.REDIS_DB || 'admin'`) Redis database.
 - `redis.url`: (defaults: `process.env.BULL_REDIS_URL || process.env.REDIS_URL`) Redis url, if set it overrides other auth options.
 - `middleware`: function to manipulate `{ queues, queuesObject, redis }`, useful if you're using admin ui like @bull-board
+- `queues`: (Array) Available queues
+- `queues[].name`: (string - required) Queue name
+- `queues[].consumer`: (function({ queue, queues } - optional) - required) Consumer function to progress the queue
 
 ## Exported context attributes
 

@@ -50,7 +50,7 @@ module.exports = ({
     const queuesObject = {};
 
     // Start queues and reuse redis connections
-    queues.filter((q) => q.name && q.consumer).forEach((queue) => {
+    queues.filter((q) => q.name).forEach((queue) => {
       queuesObject[queue.name] = new Queue(queue.name, {
         ...(queue.options || {}),
         createClient(type) {
@@ -66,7 +66,9 @@ module.exports = ({
           }
         },
       });
-      queue.consumer({ queue: queuesObject[queue.name], queues: queuesObject });
+      if (queue.consumer) {
+        queue.consumer({ queue: queuesObject[queue.name], queues: queuesObject });
+      }
     });
 
     // Attach Bull Board (v2)

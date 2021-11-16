@@ -1,6 +1,6 @@
 {
   "name": "@tonoid/bull",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Bull plugin for @tonoid/helpers - handling messaging queues and background tasks",
   "main": "index.js",
   "scripts": {

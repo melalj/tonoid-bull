@@ -40,6 +40,10 @@ module.exports = ({
       };
     }
 
+    // https://github.com/OptimalBits/bull/issues/1873
+    redisOpts.maxRetriesPerRequest = null;
+    redisOpts.enableReadyCheck = false;
+
     const client = new Redis(redisOpts);
     const subscriber = new Redis(redisOpts);
 

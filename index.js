@@ -2,12 +2,12 @@ const Queue = require('bull');
 const Redis = require('ioredis');
 
 const defaultRedisConfig = {
-  ...(process.env.REDIS_URL
-    ? { url: process.env.REDIS_URL }
+  ...((process.env.BULL_REDIS_URL || process.env.REDIS_URL)
+    ? { url: process.env.BULL_REDIS_URL || process.env.REDIS_URL }
     : {
-      host: process.env.REDIS_HOST || 'redis',
-      port: Number(process.env.REDIS_PORT || 6379),
-      password: process.env.REDIS_PASSWORD,
+      host: process.env.BULL_REDIS_HOST || process.env.REDIS_HOST || 'redis',
+      port: Number(process.env.BULL_REDIS_PORT || process.env.REDIS_PORT || 6379),
+      password: process.env.BULL_REDIS_PASSWORD || process.env.REDIS_PASSWORD,
       db: process.env.BULL_REDIS_DB || process.env.REDIS_DB || 0,
     }
   ),

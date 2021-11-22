@@ -1,20 +1,8 @@
 const Queue = require('bull');
 const Redis = require('ioredis');
 
-const defaultRedisConfig = {
-  ...((process.env.BULL_REDIS_URL || process.env.REDIS_URL)
-    ? { url: process.env.BULL_REDIS_URL || process.env.REDIS_URL }
-    : {
-      host: process.env.BULL_REDIS_HOST || process.env.REDIS_HOST || 'redis',
-      port: Number(process.env.BULL_REDIS_PORT || process.env.REDIS_PORT || 6379),
-      password: process.env.BULL_REDIS_PASSWORD || process.env.REDIS_PASSWORD,
-      db: process.env.BULL_REDIS_DB || process.env.REDIS_DB || 0,
-    }
-  ),
-};
-
 module.exports = ({
-  redis = defaultRedisConfig,
+  redis,
   bullBoard = null,
   middleware = () => {},
   queues = [],
@@ -22,9 +10,21 @@ module.exports = ({
   name: 'bull',
   init: async () => {
     // Redis options
+    const defaultRedisConfig = {
+      ...((process.env.BULL_REDIS_URL || process.env.REDIS_URL)
+        ? { url: process.env.BULL_REDIS_URL || process.env.REDIS_URL }
+        : {
+          host: process.env.BULL_REDIS_HOST || process.env.REDIS_HOST || 'redis',
+          port: Number(process.env.BULL_REDIS_PORT || process.env.REDIS_PORT || 6379),
+          password: process.env.BULL_REDIS_PASSWORD || process.env.REDIS_PASSWORD,
+          db: process.env.BULL_REDIS_DB || process.env.REDIS_DB || 0,
+        }
+      ),
+    };
+    const redisParams = redis || defaultRedisConfig;
     let redisOpts = {};
-    if (redis.url) {
-      const parsedURL = new URL(redis.url);
+    if (redisParams.url) {
+      const parsedURL = new URL(redisParams.url);
       redisOpts = {
         host: parsedURL.hostname || 'redis',
         port: Number(parsedURL.port || 6379),
@@ -33,10 +33,10 @@ module.exports = ({
       };
     } else {
       redisOpts = {
-        host: redis.host,
-        port: redis.port,
-        password: redis.password,
-        db: process.env.BULL_REDIS_DB || redis.db,
+        host: redisParams.host,
+        port: redisParams.port,
+        password: redisParams.password,
+        db: process.env.BULL_REDIS_DB || redisParams.db,
       };
     }
 

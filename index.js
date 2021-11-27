@@ -8,7 +8,7 @@ module.exports = ({
   queues = [],
 }) => ({
   name: 'bull',
-  init: async () => {
+  init: async ({ logger }) => {
     // Redis options
     const defaultRedisConfig = {
       ...((process.env.BULL_REDIS_URL || process.env.REDIS_URL)
@@ -85,9 +85,10 @@ module.exports = ({
     await middleware({ queues, queuesObject, redis });
 
     const close = () => {
-      Object.keys(queuesObject).forEach((queueName) => {
-        queuesObject[queueName].close();
-      });
+      logger.info(`  Closing ${Object.keys(queuesObject).length} bull queues...`);
+      return Promise.all(Object.keys(queuesObject).map((queueName) => (
+        queuesObject[queueName].close()
+      )));
     };
 
     return {

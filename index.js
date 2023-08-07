@@ -84,7 +84,11 @@ module.exports = ({
     // Add Queue middleware
     await middleware({ queues, queuesObject, redis });
 
-    const close = () => {
+    const close = async () => {
+      logger.info('  Closing redis client client...');
+      await client.quit();
+      logger.info('  Closing redis subscriber client...');
+      await subscriber.quit();
       logger.info(`  Closing ${Object.keys(queuesObject).length} bull queues...`);
       return Promise.all(Object.keys(queuesObject).map((queueName) => (
         queuesObject[queueName].close()

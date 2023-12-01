@@ -30,8 +30,7 @@ module.exports = ({
   bullBoard = null,
   middleware = () => {},
   queues = [],
-  ctxName = 'bull',
-}) => ({
+}, ctxName = 'bull') => ({
   name: ctxName,
   init: async ({ logger }) => {
     // Redis options

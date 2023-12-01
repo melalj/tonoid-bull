@@ -1,51 +1,54 @@
 const Queue = require('bull');
 const Redis = require('ioredis');
 
+const { URL } = require('url');
+
+function isValidUrl(string) {
+  try {
+    // eslint-disable-next-line no-new
+    new URL(string);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
 module.exports = ({
-  redis,
+  redisOptions = {
+    url: process.env.BULL_REDIS_URL || process.env.REDIS_URL,
+    host: process.env.BULL_REDIS_HOST || process.env.REDIS_HOST || 'redis',
+    port: process.env.BULL_REDIS_PORT || process.env.REDIS_PORT || 6379,
+    username: process.env.BULL_REDIS_USERNAME || process.env.REDIS_USERNAME,
+    password: process.env.BULL_REDIS_PASSWORD || process.env.REDIS_PASSWORD,
+    db: process.env.BULL_REDIS_DB || process.env.REDIS_DB,
+    extendOptions: {
+      // https://github.com/OptimalBits/bull/issues/1873
+      maxRetriesPerRequest: null,
+      enableReadyCheck: false,
+    },
+  },
   bullBoard = null,
   middleware = () => {},
   queues = [],
+  ctxName = 'bull',
 }) => ({
-  name: 'bull',
+  name: ctxName,
   init: async ({ logger }) => {
     // Redis options
-    const defaultRedisConfig = {
-      ...((process.env.BULL_REDIS_URL || process.env.REDIS_URL)
-        ? { url: process.env.BULL_REDIS_URL || process.env.REDIS_URL }
-        : {
-          host: process.env.BULL_REDIS_HOST || process.env.REDIS_HOST || 'redis',
-          port: Number(process.env.BULL_REDIS_PORT || process.env.REDIS_PORT || 6379),
-          password: process.env.BULL_REDIS_PASSWORD || process.env.REDIS_PASSWORD,
-          db: process.env.BULL_REDIS_DB || process.env.REDIS_DB || 0,
-        }
-      ),
+    const parsedURL = isValidUrl(redisOptions.url) ? new URL(redisOptions.url) : {};
+    const redisUsername = parsedURL.username || redisOptions.username;
+    const redisPassword = parsedURL.password || redisOptions.password;
+    const redisClientOptions = {
+      host: parsedURL.hostname || redisOptions.host,
+      port: Number(parsedURL.port || redisOptions.port),
+      username: redisUsername ? decodeURIComponent(redisUsername) : undefined,
+      password: redisPassword ? decodeURIComponent(redisPassword) : undefined,
+      db: redisOptions.db || (parsedURL.pathname || '/0').slice(1) || '0',
+      ...redisOptions.extendOptions,
     };
-    const redisParams = redis || defaultRedisConfig;
-    let redisOpts = {};
-    if (redisParams.url) {
-      const parsedURL = new URL(redisParams.url);
-      redisOpts = {
-        host: parsedURL.hostname || 'redis',
-        port: Number(parsedURL.port || 6379),
-        password: parsedURL.password ? decodeURIComponent(parsedURL.password) : null,
-        db: process.env.BULL_REDIS_DB || (parsedURL.pathname || '/0').substr(1) || '0',
-      };
-    } else {
-      redisOpts = {
-        host: redisParams.host,
-        port: redisParams.port,
-        password: redisParams.password,
-        db: process.env.BULL_REDIS_DB || redisParams.db,
-      };
-    }
 
-    // https://github.com/OptimalBits/bull/issues/1873
-    redisOpts.maxRetriesPerRequest = null;
-    redisOpts.enableReadyCheck = false;
-
-    const client = new Redis(redisOpts);
-    const subscriber = new Redis(redisOpts);
+    const client = new Redis(redisClientOptions);
+    const subscriber = new Redis(redisClientOptions);
 
     const queuesObject = {};
 
@@ -60,7 +63,7 @@ module.exports = ({
             case 'subscriber':
               return subscriber;
             case 'bclient':
-              return new Redis(redisOpts);
+              return new Redis(redisClientOptions);
             default:
               throw new Error('Unexpected connection type: ', type);
           }
@@ -82,7 +85,7 @@ module.exports = ({
     }
 
     // Add Queue middleware
-    await middleware({ queues, queuesObject, redis });
+    await middleware({ queues, queuesObject, redisOptions });
 
     const close = async () => {
       logger.info('  Closing redis client client...');

@@ -34,11 +34,13 @@ module.exports = ({
     const redisErrorHandler = redisOptions.errorHandler || defaultRedisOptions.errorHandler;
 
     const parsedURL = isValidUrl(redisUrl) ? new URL(redisUrl) : {};
-    const redisClientOptions = deepmerge(
+    const ioRedisClientOptions = deepmerge(
       {
         db: redisOptions.db || (parsedURL.pathname || '/0').slice(1) || defaultRedisOptions.db,
-        reconnectStrategy: (retries) => {
-          if (retries >= 10) return false;
+        retryStrategy: (retries) => {
+          if (retries >= 10) {
+            throw new Error('Redis connection retry limit exceeded');
+          }
           return retries * 500 + 100;
         },
       },
@@ -50,15 +52,17 @@ module.exports = ({
       },
     );
 
-    const client = new Redis(redisUrl, redisClientOptions);
+    const client = new Redis(redisUrl, ioRedisClientOptions);
     client.on('error', (err) => redisErrorHandler(err, 'client'));
 
-    const subscriber = new Redis(redisUrl, redisClientOptions);
-    client.on('error', (err) => redisErrorHandler(err, 'subscriber'));
+    const subscriber = new Redis(redisUrl, ioRedisClientOptions);
+    subscriber.on('error', (err) => redisErrorHandler(err, 'subscriber'));
 
-    const createBclientRedis = () => {
-      const bclient = new Redis(redisUrl, redisClientOptions);
-      bclient.on('error', (err) => redisErrorHandler(err, 'bclient'));
+    const bclients = {};
+    const createBclientRedis = (queueName) => {
+      const bclient = new Redis(redisUrl, ioRedisClientOptions);
+      bclient.on('error', (err) => redisErrorHandler(err, queueName));
+      bclients[queueName] = bclient;
       return bclient;
     };
 
@@ -74,7 +78,7 @@ module.exports = ({
             case 'subscriber':
               return subscriber;
             case 'bclient':
-              return createBclientRedis();
+              return createBclientRedis(queue.name);
             default:
               throw new Error('Unexpected connection type: ', type);
           }
@@ -99,14 +103,22 @@ module.exports = ({
     await middleware({ queues, queuesObject, redisOptions });
 
     const close = async () => {
-      logger.info('  Closing redis client client...');
-      await client.quit();
-      logger.info('  Closing redis subscriber client...');
-      await subscriber.quit();
-      logger.info(`  Closing ${Object.keys(queuesObject).length} bull queues...`);
-      return Promise.all(Object.keys(queuesObject).map((queueName) => (
-        queuesObject[queueName].close()
-      )));
+      try {
+        logger.info('  Closing redis client client...');
+        await client.disconnect();
+        logger.info('  Closing redis subscriber client...');
+        await subscriber.disconnect();
+        logger.info(`  Closing ${Object.keys(queuesObject).length} bull queues...`);
+        return Promise.all(Object.keys(queuesObject).map(async (queueName) => {
+          await queuesObject[queueName].close();
+          if (bclients[queueName]) {
+            await bclients[queueName].disconnect();
+          }
+        }));
+      } catch (e) {
+        logger.error(`  Couldn't close redis clients: ${e.message}');`);
+        return null;
+      }
     };
 
     return {

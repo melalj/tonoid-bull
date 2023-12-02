@@ -1,3 +1,4 @@
+const deepmerge = require('deepmerge');
 const Queue = require('bull');
 const Redis = require('ioredis');
 
@@ -13,16 +14,15 @@ function isValidUrl(string) {
   }
 }
 
+const defaultRedisOptions = {
+  url: process.env.BULL_REDIS_URL || process.env.REDIS_URL,
+  db: process.env.BULL_REDIS_DB || process.env.REDIS_DB || '0',
+  errorHandler: () => {},
+  extendOptions: {},
+};
+
 module.exports = ({
-  redisOptions = {
-    url: process.env.BULL_REDIS_URL || process.env.REDIS_URL,
-    host: process.env.BULL_REDIS_HOST || process.env.REDIS_HOST || 'redis',
-    port: process.env.BULL_REDIS_PORT || process.env.REDIS_PORT || 6379,
-    username: process.env.BULL_REDIS_USERNAME || process.env.REDIS_USERNAME,
-    password: process.env.BULL_REDIS_PASSWORD || process.env.REDIS_PASSWORD,
-    db: process.env.BULL_REDIS_DB || process.env.REDIS_DB,
-    extendOptions: {},
-  },
+  redisOptions = defaultRedisOptions,
   bullBoard = null,
   middleware = () => {},
   queues = [],
@@ -30,27 +30,40 @@ module.exports = ({
   name: ctxName,
   init: async ({ logger }) => {
     // Redis options
-    const parsedURL = isValidUrl(redisOptions.url) ? new URL(redisOptions.url) : {};
-    const redisUsername = parsedURL.username || redisOptions.username;
-    const redisPassword = parsedURL.password || redisOptions.password;
-    const redisClientOptions = {
-      host: parsedURL.hostname || redisOptions.host,
-      port: Number(parsedURL.port || redisOptions.port),
-      username: redisUsername ? decodeURIComponent(redisUsername) : undefined,
-      password: redisPassword ? decodeURIComponent(redisPassword) : undefined,
-      db: redisOptions.db || (parsedURL.pathname || '/0').slice(1) || '0',
-      ...redisOptions.extendOptions,
-      // https://github.com/OptimalBits/bull/issues/1873
-      maxRetriesPerRequest: null,
-      enableReadyCheck: false,
+    const redisUrl = redisOptions.url || defaultRedisOptions.url;
+    const redisErrorHandler = redisOptions.errorHandler || defaultRedisOptions.errorHandler;
+
+    const parsedURL = isValidUrl(redisUrl) ? new URL(redisUrl) : {};
+    const redisClientOptions = deepmerge(
+      {
+        db: redisOptions.db || (parsedURL.pathname || '/0').slice(1) || defaultRedisOptions.db,
+        reconnectStrategy: (retries) => {
+          if (retries >= 10) return false;
+          return retries * 500 + 100;
+        },
+      },
+      {
+        ...redisOptions.extendOptions,
+        // https://github.com/OptimalBits/bull/issues/1873
+        maxRetriesPerRequest: null,
+        enableReadyCheck: false,
+      },
+    );
+
+    const client = new Redis(redisUrl, redisClientOptions);
+    client.on('error', (err) => redisErrorHandler(err, 'client'));
+
+    const subscriber = new Redis(redisUrl, redisClientOptions);
+    client.on('error', (err) => redisErrorHandler(err, 'subscriber'));
+
+    const createBclientRedis = () => {
+      const bclient = new Redis(redisUrl, redisClientOptions);
+      bclient.on('error', (err) => redisErrorHandler(err, 'bclient'));
+      return bclient;
     };
 
-    const client = new Redis(redisClientOptions);
-    const subscriber = new Redis(redisClientOptions);
-
-    const queuesObject = {};
-
     // Start queues and reuse redis connections
+    const queuesObject = {};
     queues.filter((q) => q.name).forEach((queue) => {
       queuesObject[queue.name] = new Queue(queue.name, {
         ...(queue.options || {}),
@@ -61,7 +74,7 @@ module.exports = ({
             case 'subscriber':
               return subscriber;
             case 'bclient':
-              return new Redis(redisClientOptions);
+              return createBclientRedis();
             default:
               throw new Error('Unexpected connection type: ', type);
           }

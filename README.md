@@ -7,17 +7,13 @@ Bull plugin for [@tonoid/helpers](https://github.com/melalj/tonoid-helpers) - ha
 
 ## Init options
 
-- `redisOptions.host`: (defaults: `process.env.BULL_REDIS_HOST || process.env.REDIS_HOST || 'redis'`) Redis host.
-- `redisOptions.port`: (defaults: `process.env.BULL_REDIS_PORT || process.env.REDIS_PORT || 6379`) Redis port.
-- `redisOptions.username`: (defaults: `process.env.BULL_REDIS_USERNAME || process.env.REDIS_USERNAME`) Redis username.
-- `redisOptions.password`: (defaults: `process.env.BULL_REDIS_PASSWORD || process.env.REDIS_PASSWORD`) Redis password.
-- `redisOptions.db`: (defaults: `process.env.BULL_REDIS_DB || process.env.REDIS_DB || 0`) Redis database.
 - `redisOptions.url`: (defaults: `process.env.BULL_REDIS_URL || process.env.REDIS_URL`) Redis url, if set it overrides other auth options.
+- `redisOptions.db`: (defaults: `process.env.BULL_REDIS_DB || process.env.REDIS_DB || '0'`) Redis database.
+- `redisOptions.errorHandler`: (default: `(err) => {}`) Handle redis connect error
 - `middleware`: function to manipulate `{ queues, queuesObject, redisOptions }`, useful if you're using admin ui like @bull-board
 - `queues`: (Array) Available queues
 - `queues[].name`: (string - required) Queue name
 - `queues[].consumer`: (function({ queue, queues } - optional) - required) Consumer function to progress the queue
-- `ctxName`: (defaults: `bull`)
 
 ## Exported context attributes
 
@@ -43,17 +39,22 @@ const jsonStringifyQueue = ({ queue }) => {
 
 (async () => {
   await init([
-    bull({
-      redisOptions: {
-        url: 'redis://locahost:6379',
+    bull(
+      {
+        redisOptions: {
+          url: 'redis://locahost:6379',
+          db: 0,
+          errorHandler: (err, scope) => console.error(scope, err)
+        },
+        queues: [
+          { name: 'jsonStringify', consumer: jsonStringifyConsumer },
+        ],
       },
-      queues: [
-        { name: 'jsonStringify', consumer: jsonStringifyConsumer },
-      ],
-    }),
+      'myBull',
+    ),
   ]);
 
-  const job = await context.bull.jsonStringify.add({ foo: 'bar' });
+  const job = await context.myBull.jsonStringify.add({ foo: 'bar' });
   const result = await job.finished();
   console.log(result);
 })();

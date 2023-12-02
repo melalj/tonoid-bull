@@ -21,11 +21,7 @@ module.exports = ({
     username: process.env.BULL_REDIS_USERNAME || process.env.REDIS_USERNAME,
     password: process.env.BULL_REDIS_PASSWORD || process.env.REDIS_PASSWORD,
     db: process.env.BULL_REDIS_DB || process.env.REDIS_DB,
-    extendOptions: {
-      // https://github.com/OptimalBits/bull/issues/1873
-      maxRetriesPerRequest: null,
-      enableReadyCheck: false,
-    },
+    extendOptions: {},
   },
   bullBoard = null,
   middleware = () => {},
@@ -44,6 +40,9 @@ module.exports = ({
       password: redisPassword ? decodeURIComponent(redisPassword) : undefined,
       db: redisOptions.db || (parsedURL.pathname || '/0').slice(1) || '0',
       ...redisOptions.extendOptions,
+      // https://github.com/OptimalBits/bull/issues/1873
+      maxRetriesPerRequest: null,
+      enableReadyCheck: false,
     };
 
     const client = new Redis(redisClientOptions);
@@ -98,6 +97,7 @@ module.exports = ({
     };
 
     return {
+      name: ctxName,
       close,
       queues: queuesObject,
       Queue,
